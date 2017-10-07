@@ -1,32 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 
-import BareGoogleMap from './BareGoogleMap';
-import { url } from '../../googleMaps';
+const BareGoogleMap = withScriptjs(withGoogleMap((props) =>
+  <GoogleMap
+    defaultZoom={8}
+    ref={props.onMapMounted}
+    onBoundsChanged={props.onBoundsChanged}
+    center={props.center}
+  >
+    {props.children}
+  </GoogleMap>
+));
 
-class GoogleMap extends Component {
-  onBoundsChanged = () => {
-    this.props.onBoundChange({
-      center: this.map.getCenter(),
-      map: this.map,
-    });
-  }
-
-  render() {
-    return (
-      <BareGoogleMap
-        googleMapURL={url}
-        loadingElement={<div style={{ height: `100%` }}/>}
-        containerElement={<div style={{ height: `500px` }}/>}
-        mapElement={<div style={{ height: `100%` }}/>}
-        onMapMounted={ref => this.map = ref}
-        onBoundsChanged={this.onBoundsChanged}
-        center={this.props.center}
-        clickableIcons={true}
-      >
-        {this.props.children}
-      </BareGoogleMap>
-    )
-  }
-}
-
-export default GoogleMap;
+export default BareGoogleMap;

@@ -6,6 +6,7 @@ import Navigation from './Navigation/Navigation';
 import SearchBox from './SearchBox/SearchBox';
 import GoogleMap from './GoogleMap/GoogleMap';
 import { Marker, DirectionsRenderer } from 'react-google-maps';
+import { url } from '../googleMaps';
 
 function boundsAdd(place, boundsObject) {
   const { geometry: { location, viewport } } = place;
@@ -67,13 +68,9 @@ class App extends Component {
     });
   }
 
-  onBoundChange = ({ center, map }) => {
+  onBoundsChanged = () => {
     this.setState({
-      center: {
-        lat: center.lat(),
-        lng: center.lng(),
-      },
-      map,
+      center: this.map.getCenter(),
     });
   }
 
@@ -90,7 +87,12 @@ class App extends Component {
           number={2}
         />
         <GoogleMap
-          onBoundChange={this.onBoundChange}
+          googleMapURL={url}
+          loadingElement={<div style={{ height: `100%` }}/>}
+          containerElement={<div style={{ height: `500px` }}/>}
+          mapElement={<div style={{ height: `100%` }}/>}
+          onMapMounted={ref => this.map = ref}
+          onBoundsChanged={this.onBoundsChanged}
           center={this.state.center}
         >
           {(this.state.marker1 && !this.state.directions) && <Marker key='Marker1' position={this.state.marker1}/>}
