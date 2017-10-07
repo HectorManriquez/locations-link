@@ -26,7 +26,6 @@ class App extends Component {
         lat: 30.267153,
         lng: -97.74306079999997
       },
-      map: null,
       directions: null,
     }
   }
@@ -46,9 +45,6 @@ class App extends Component {
         const bounds = new google.maps.LatLngBounds();
         const DirectionsService = new google.maps.DirectionsService();
 
-        await boundsAdd(this.state.place1, bounds);
-        await boundsAdd(this.state.place2, bounds);
-
         DirectionsService.route({
           origin: new google.maps.LatLng(this.state.marker1),
           destination: new google.maps.LatLng(this.state.marker2),
@@ -63,7 +59,10 @@ class App extends Component {
           }
         });
 
-        this.state.map.fitBounds(bounds);
+        await boundsAdd(this.state.place1, bounds);
+        await boundsAdd(this.state.place2, bounds);
+
+        this.map.fitBounds(bounds);
       }
     });
   }
