@@ -1,0 +1,21 @@
+{
+  "name": "locations-link",
+  "version": "0.1.0",
+  "private": false,
+  "dependencies": {
+    "@google/maps": "^0.4.3",
+    "bootstrap": "^3.3.7",
+    "react": "^16.0.0",
+    "react-bootstrap": "^0.31.3",
+    "react-dom": "^16.0.0",
+    "react-google-maps": "^8.3.5",
+    "react-scripts": "1.0.14",
+    "recompose": "^0.26.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
