@@ -12,15 +12,13 @@ class SearchBox extends Component {
 
   render() {
     return (
-      <div>
-        <GoogleMapsSearchBox
-          googleMapURL={url}
-          loadingElement={<div style={{ height: `100%` }}/>}
-          containerElement={<div style={{ height: `400px` }}/>}
-          onSearchBoxMounted={ref => this.searchBox = ref}
-          onPlacesChanged={this.onPlacesChanged}
-        />
-      </div>
+      <GoogleMapsSearchBox
+        googleMapURL={url}
+        loadingElement={<div style={{ height: `100%` }}/>}
+        containerElement={<div style={{ height: `400px` }}/>}
+        onSearchBoxMounted={ref => this.searchBox = ref}
+        onPlacesChanged={this.onPlacesChanged}
+      />
     )
   }
 }
