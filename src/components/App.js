@@ -1,5 +1,6 @@
 /* global google */
 import React, { Component } from 'react';
+import { Panel } from 'react-bootstrap';
 
 import './App.css';
 import Navigation from './Navigation/Navigation';
@@ -13,6 +14,18 @@ function boundsAdd(place, boundsObject) {
   viewport ? boundsObject.union(viewport) : boundsObject.extend(location);
   Promise.resolve();
 }
+
+// function directionsDisplay(directions) {
+//   const { distance, duration } = directions.routes[0].legs[0];
+//
+//   return (
+//     <div>
+//       {`Duration: ${duration.text}`}
+//       <br/>
+//       {`Distance: ${distance.text}`}
+//     </div>
+//   )
+// }
 
 class App extends Component {
   constructor(props) {
@@ -49,6 +62,7 @@ class App extends Component {
           origin: new google.maps.LatLng(this.state.marker1),
           destination: new google.maps.LatLng(this.state.marker2),
           travelMode: google.maps.TravelMode.DRIVING,
+          provideRouteAlternatives: true,
         }, (result, status) => {
           if (status === google.maps.DirectionsStatus.OK) {
             this.setState({
@@ -73,6 +87,21 @@ class App extends Component {
     });
   }
 
+  onMarker1Changed = () => {
+    // console.log(this.marker1);
+  }
+
+  onMarker2Changed = () => {
+    // console.log(this.marker2);
+  }
+
+  onDirectionsChanged = () => {
+    console.log(this.directions.getPanel());
+    this.setState({
+      directions: this.directions.getDirections(),
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -85,6 +114,18 @@ class App extends Component {
           onPlaceChange={this.onPlaceChange}
           number={2}
         />
+        {/*<br/>*/}
+        {/*{this.state.directions && directionsDisplay(this.state.directions)}*/}
+        <br/>
+        {this.state.directions &&
+          <Panel
+            id='googlePanel'
+            header='Google Directions Options'
+            ref={panel => this.googlePanel = panel}
+            collapsible
+            defaultExpanded={true}
+          />
+        }
         <GoogleMap
           googleMapURL={url}
           loadingElement={<div style={{ height: `100%` }}/>}
@@ -94,9 +135,36 @@ class App extends Component {
           onBoundsChanged={this.onBoundsChanged}
           center={this.state.center}
         >
-          {(this.state.marker1 && !this.state.directions) && <Marker key='Marker1' position={this.state.marker1}/>}
-          {(this.state.marker2 && !this.state.directions) && <Marker key='Marker2' position={this.state.marker2}/>}
-          {this.state.directions && <DirectionsRenderer directions={this.state.directions}/>}
+          {(this.state.marker1 && !this.state.directions) &&
+          <Marker
+            key='marker1'
+            ref={marker => this.marker1 = marker}
+            onPositionChanged={this.onMarker1Changed}
+            position={this.state.marker1}
+            draggable={false}
+          />
+          }
+          {(this.state.marker2 && !this.state.directions) &&
+          <Marker
+            key='marker2'
+            ref={marker => this.marker2 = marker}
+            onPositionChanged={this.onMarker2Changed}
+            position={this.state.marker2}
+            draggable={false}
+          />
+          }
+          {this.state.directions &&
+          <DirectionsRenderer
+            ref={directions => this.directions = directions}
+            onDirectionsChanged={this.onDirectionsChanged}
+            panel={document.getElementById('googlePanel')}
+            // panel={this.googlePanel}
+            directions={this.state.directions}
+            options={{
+              draggable: true,
+            }}
+          />
+          }
         </GoogleMap>
       </div>
     );
